@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaPlan · Ahorra agua, ahorra dinero</title>
+  <meta name="description" content="AquaPlan: calcula cuánta agua usa tu hogar, en qué se va y cómo ahorrar en tu recibo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="solucion.css">
+</head>
+<body data-modo="pasos">
+
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <!-- =====================================================
+       HEADER (una sola barra con dos variantes:
+       "pasos" para el cuestionario y "app" para los resultados)
+       ===================================================== -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#hogar" class="logo">
+        <span class="logo__icon">
+          <svg viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="20" fill="#0D4D6B"/>
+            <path d="M20 9c6 8 9 13 9 16a9 9 0 0 1-18 0c0-3 3-8 9-16z" fill="#fff"/>
+          </svg>
+        </span>
+        <span class="logo__text">AquaPlan</span>
+      </a>
+
+      <!-- Variante pasos -->
+      <a href="#hogar" class="header__link solo-pasos">Guardar y salir</a>
+
+      <!-- Variante app -->
+      <nav class="nav solo-app" aria-label="Navegación de la aplicación">
+        <ul class="nav__list">
+          <li><a href="#diagnostico" class="nav__link" data-nav="diagnostico">Diagnóstico</a></li>
+          <li><a href="#plan" class="nav__link" data-nav="plan">Plan</a></li>
+          <li><a href="#" class="nav__link">Seguimiento</a></li>
+          <li>
+            <details class="dropdown">
+              <summary class="nav__link">Perfil</summary>
+              <ul class="dropdown__menu">
+                <li><a href="#hogar">Mis datos</a></li>
+                <li><a href="#diagnostico">Mi diagnóstico</a></li>
+                <li><a href="#hogar">Cerrar sesión</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </nav>
+      <span class="avatar solo-app" aria-hidden="true">MR</span>
+    </div>
+  </header>
+
+  <main id="contenido" class="container main">
+
+    <!-- =====================================================
+         PROGRESO (solo en los 3 pasos del cuestionario)
+         ===================================================== -->
+    <section class="progress solo-pasos" aria-label="Progreso">
+      <div class="progress__top">
+        <span id="paso-texto">Paso 1 de 3</span>
+        <span id="paso-porcentaje">33%</span>
+      </div>
+      <div class="progress__bar"><div class="progress__fill" id="paso-barra"></div></div>
+
+      <ol class="steps">
+        <li class="step" data-step="1"><span class="step__num">1</span>Tu hogar</li>
+        <li class="step" data-step="2"><span class="step__num">2</span>Tus hábitos</li>
+        <li class="step" data-step="3"><span class="step__num">3</span>Tus equipos</li>
+      </ol>
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 1 · TU HOGAR
+         ===================================================== -->
+    <section class="screen" id="hogar" data-paso="1" aria-labelledby="t-hogar">
+      <div class="page-title">
+        <h1 id="t-hogar">Cuéntanos de tu hogar</h1>
+        <p>Con estos datos calculamos tu consumo y tu ahorro real.</p>
+      </div>
+
+      <div class="layout">
+        <div class="card card--form">
+
+          <div class="field">
+            <span class="label">¿Cuántas personas viven aquí?</span>
+            <div class="counter">
+              <button type="button" class="counter__btn counter__btn--minus" id="menos" aria-label="Quitar persona">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>
+              </button>
+              <span class="counter__value" id="personas" aria-live="polite">3</span>
+              <button type="button" class="counter__btn counter__btn--plus" id="mas" aria-label="Agregar persona">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label class="label" for="monto">Monto de tu último recibo</label>
+              <div class="input-group">
+                <span class="input-group__addon">S/</span>
+                <input type="number" id="monto" value="68.00" step="0.01" min="0">
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="consumo">
+                Consumo facturado
+                <span class="info" title="Lo encuentras en tu recibo de agua">i</span>
+              </label>
+              <div class="input-group">
+                <input type="number" id="consumo" value="14" min="0">
+                <span class="input-group__addon">m³</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label">Tipo de vivienda</span>
+            <div class="toggle" role="radiogroup" data-campo="vivienda">
+              <button type="button" class="toggle__btn is-active" role="radio" aria-checked="true">Departamento</button>
+              <button type="button" class="toggle__btn" role="radio" aria-checked="false">Casa</button>
+            </div>
+          </div>
+
+          <hr class="divider">
+
+          <a href="#habitos" class="btn btn--primary">Continuar</a>
+        </div>
+
+        <aside class="aside">
+          <div class="card help">
+            <h2 class="aside__title">¿Dónde encuentro mi consumo?</h2>
+            <div class="receipt">
+              <div class="receipt__head">Recibo de agua</div>
+              <div class="receipt__body">
+                <span class="receipt__line" style="width: 54%"></span>
+                <span class="receipt__line" style="width: 74%"></span>
+                <div class="receipt__highlight">
+                  <span>Consumo facturado</span>
+                  <strong>14 m³</strong>
+                </div>
+                <span class="receipt__line" style="width: 68%"></span>
+                <span class="receipt__line" style="width: 44%"></span>
+              </div>
+            </div>
+            <p class="help__text">Búscalo en tu recibo como «Consumo facturado». Se mide en metros cúbicos.</p>
+            <p class="help__note">1 m³ = 1 000 litros</p>
+          </div>
+
+          <div class="note">
+            <div class="note__head">
+              <span class="note__icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2l8 3.5V11c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5.5z" fill="#0D4D6B"/>
+                  <path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <h2>Tus datos son privados</h2>
+            </div>
+            <p>Solo usamos esta información para calcular tu consumo y tu ahorro. No la compartimos con terceros.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 2 · TUS HÁBITOS
+         ===================================================== -->
+    <section class="screen" id="habitos" data-paso="2" aria-labelledby="t-habitos">
+      <div class="page-title">
+        <h1 id="t-habitos">Tus hábitos</h1>
+        <p>Responde con lo que haces normalmente. No hay respuestas incorrectas.</p>
+      </div>
+
+      <div class="layout">
+        <div class="card card--form">
+
+          <div class="question">
+            <span class="icon-circle icon-circle--lg">
+              <svg viewBox="-14 -14 28 28" aria-hidden="true" fill="#5AA9D6">
+                <path d="M-12,-2 H12 V3 Q12,8 6,8 H-6 Q-12,8 -12,3 Z"/>
+                <path d="M-10,-2 V-9 Q-10,-13 -6,-13 Q-2,-13 -2,-9" fill="none" stroke="#5AA9D6" stroke-width="2"/>
+                <path d="M-7,8 L-8,11 M7,8 L8,11" stroke="#5AA9D6" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <div>
+              <span class="eyebrow">Ducha</span>
+              <h2 class="question__title">¿Cuánto dura tu ducha normalmente?</h2>
+            </div>
+          </div>
+
+          <div class="options options--4" role="radiogroup" data-campo="ducha">
+            <button type="button" class="option" role="radio" aria-checked="false">Menos de 5 min</button>
+            <button type="button" class="option is-active" role="radio" aria-checked="true">5 a 10 min</button>
+            <button type="button" class="option" role="radio" aria-checked="false">10 a 15 min</button>
+            <button type="button" class="option" role="radio" aria-checked="false">Más de 15 min</button>
+          </div>
+
+          <div class="field">
+            <h2 class="question__subtitle">¿Cierras la llave al enjabonarte?</h2>
+            <div class="toggle toggle--3" role="radiogroup" data-campo="llave">
+              <button type="button" class="toggle__btn toggle__btn--light" role="radio" aria-checked="false">Sí</button>
+              <button type="button" class="toggle__btn toggle__btn--light is-active" role="radio" aria-checked="true">A veces</button>
+              <button type="button" class="toggle__btn toggle__btn--light" role="radio" aria-checked="false">No</button>
+            </div>
+          </div>
+
+          <div class="tip">
+            <svg class="tip__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="10" r="7" fill="#FFB703"/>
+              <rect x="8.5" y="17" width="7" height="4" rx="1.5" fill="#E8A300"/>
+            </svg>
+            <p>Cerrar la llave al enjabonarte puede ahorrar hasta <strong>12 litros</strong> por ducha.</p>
+          </div>
+
+          <div class="actions">
+            <a href="#hogar" class="btn btn--secondary">Atrás</a>
+            <a href="#equipos" class="btn btn--primary">Siguiente</a>
+          </div>
+        </div>
+
+        <aside class="aside">
+          <div class="card card--aside">
+            <h2 class="aside__title">Hábitos a revisar</h2>
+            <ul class="list">
+              <li class="list__item">
+                <span class="list__label"><span class="num num--active">1</span><strong>Ducha</strong></span>
+                <span class="status status--active">En curso</span>
+              </li>
+              <li class="list__item">
+                <span class="list__label"><span class="num">2</span>Inodoro</span>
+                <span class="status">Pendiente</span>
+              </li>
+              <li class="list__item">
+                <span class="list__label"><span class="num">3</span>Lavado de ropa</span>
+                <span class="status">Pendiente</span>
+              </li>
+              <li class="list__item">
+                <span class="list__label"><span class="num">4</span>Cocina y platos</span>
+                <span class="status">Pendiente</span>
+              </li>
+            </ul>
+            <p class="muted">Tiempo estimado: 2 minutos</p>
+          </div>
+
+          <div class="fact">
+            <p class="fact__eyebrow">¿Sabías que?</p>
+            <p class="fact__text">Una ducha de 10 minutos puede usar entre 80 y 100 litros de agua.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 3 · TUS EQUIPOS
+         ===================================================== -->
+    <section class="screen" id="equipos" data-paso="3" aria-labelledby="t-equipos">
+      <div class="page-title">
+        <h1 id="t-equipos">¿Con qué cuentas en casa?</h1>
+        <p>Marca lo que tienes. Así ajustamos tus recomendaciones.</p>
+      </div>
+
+      <div class="layout">
+        <div class="card card--form">
+          <fieldset class="field">
+            <legend class="question__subtitle">Selecciona tus equipos</legend>
+
+            <div class="equip-grid">
+              <label class="equip">
+                <input type="checkbox" name="equipos" value="lavadora" checked>
+                <span class="equip__check"></span>
+                <span class="icon-circle">
+                  <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="-9" y="-11" width="18" height="22" rx="3"/><circle cx="0" cy="2" r="5"/><path d="M-5,-7 H-2"/></svg>
+                </span>
+                <span class="equip__name">Lavadora</span>
+              </label>
+
+              <label class="equip">
+                <input type="checkbox" name="equipos" value="inodoro">
+                <span class="equip__check"></span>
+                <span class="icon-circle">
+                  <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M-8,-10 H-2 V-2 H10 Q10,6 2,7 L3,11 H-5 L-4,6 Q-8,4 -8,-2 Z"/></svg>
+                </span>
+                <span class="equip__name">Inodoro de doble descarga</span>
+              </label>
+
+              <label class="equip">
+                <input type="checkbox" name="equipos" value="aireador">
+                <span class="equip__check"></span>
+                <span class="icon-circle">
+                  <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M-10,-3 H3 A6,6 0 0 1 9,3 V6"/><path d="M-4,-3 V-9 M-8,-9 H0"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/></svg>
+                </span>
+                <span class="equip__name">Aireador en caños</span>
+              </label>
+
+              <label class="equip">
+                <input type="checkbox" name="equipos" value="ducha">
+                <span class="equip__check"></span>
+                <span class="icon-circle">
+                  <svg viewBox="-12 -13 24 26" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M-10,-12 H0 V-10" fill="none"/><path d="M-8,-4 A8,7 0 0 1 8,-4 Z"/><circle cx="-5" cy="3" r="1"/><circle cx="0" cy="5" r="1"/><circle cx="5" cy="3" r="1"/><circle cx="-3" cy="10" r="1"/><circle cx="3" cy="10" r="1"/></svg>
+                </span>
+                <span class="equip__name">Ducha ahorradora</span>
+              </label>
+
+              <label class="equip">
+                <input type="checkbox" name="equipos" value="terma" checked>
+                <span class="equip__check"></span>
+                <span class="icon-circle">
+                  <svg viewBox="-12 -13 24 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="-7" y="-12" width="14" height="20" rx="6"/><path d="M-3,8 V12 M3,8 V12"/><path d="M-2,-2 Q0,-6 2,-2 Q2,2 0,2 Q-2,2 -2,-2 Z"/></svg>
+                </span>
+                <span class="equip__name">Terma o calentador</span>
+              </label>
+
+              <label class="equip">
+                <input type="checkbox" name="equipos" value="jardin">
+                <span class="equip__check"></span>
+                <span class="icon-circle">
+                  <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M0,10 V-1"/><path d="M0,3 Q-8,3 -9,-5 Q-2,-5 0,3"/><path d="M0,-1 Q6,-2 8,-9 Q1,-9 0,-1"/></svg>
+                </span>
+                <span class="equip__name">Jardín o plantas</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <h2 class="question__subtitle">¿Has notado alguna fuga en casa?</h2>
+            <div class="toggle toggle--3" role="radiogroup" data-campo="fuga">
+              <button type="button" class="toggle__btn toggle__btn--light" role="radio" aria-checked="false">Sí</button>
+              <button type="button" class="toggle__btn toggle__btn--light is-active" role="radio" aria-checked="true">No</button>
+              <button type="button" class="toggle__btn toggle__btn--light" role="radio" aria-checked="false">No estoy seguro</button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a href="#habitos" class="btn btn--secondary">Atrás</a>
+            <a href="#diagnostico" class="btn btn--primary">Ver mi diagnóstico</a>
+          </div>
+        </div>
+
+        <aside class="aside">
+          <div class="card card--aside">
+            <div class="aside__head">
+              <h2 class="aside__title">Resumen de tus datos</h2>
+              <a href="#hogar" class="link">Editar</a>
+            </div>
+            <dl class="data">
+              <div class="data__row"><dt>Personas</dt><dd data-resumen="personas">3</dd></div>
+              <div class="data__row"><dt>Último recibo</dt><dd data-resumen="monto">S/ 68.00</dd></div>
+              <div class="data__row"><dt>Consumo facturado</dt><dd data-resumen="consumo">14 m³</dd></div>
+              <div class="data__row"><dt>Tipo de vivienda</dt><dd data-resumen="vivienda">Departamento</dd></div>
+              <div class="data__row"><dt>Duración de ducha</dt><dd data-resumen="ducha">5 a 10 min</dd></div>
+              <div class="data__row"><dt>Cierra la llave</dt><dd data-resumen="llave">A veces</dd></div>
+            </dl>
+          </div>
+
+          <div class="note">
+            <div class="note__head">
+              <svg class="tip__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="10" r="7" fill="#FFB703"/>
+                <rect x="8.5" y="17" width="7" height="4" rx="1.5" fill="#E8A300"/>
+              </svg>
+              <h2>Último paso</h2>
+            </div>
+            <p>Con esto armamos tu diagnóstico y tus 5 acciones con más impacto.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 4 · TU DIAGNÓSTICO
+         ===================================================== -->
+    <section class="screen" id="diagnostico" data-app="diagnostico" aria-labelledby="t-diagnostico">
+      <div class="page-head">
+        <div class="page-title page-title--tight">
+          <h1 id="t-diagnostico">Tu diagnóstico</h1>
+          <p id="diag-subtitulo">Basado en los datos de tu hogar · 3 personas · Departamento</p>
+        </div>
+
+        <div class="redo">
+          <p class="redo__title">Rehacer diagnóstico</p>
+          <div class="chips" role="radiogroup" aria-label="Tamaño del hogar" id="hogar-chips">
+            <button type="button" class="chip" role="radio" data-hogar="1a2">1 a 2</button>
+            <button type="button" class="chip" role="radio" data-hogar="3a4">3 a 4</button>
+            <button type="button" class="chip" role="radio" data-hogar="5mas">5 o más</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi kpi--main">
+          <p class="kpi__label">Tu hogar usa</p>
+          <p class="kpi__value kpi__value--xl" data-diag="total">480 L</p>
+          <p class="kpi__note">al día &nbsp;•&nbsp; aprox. <strong data-diag="costo">S/ 68 al mes</strong></p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__label">Por persona</p>
+          <p class="kpi__value" data-diag="persona">160 L</p>
+          <p class="kpi__note">al día en promedio</p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__label">Podrías ahorrar</p>
+          <p class="kpi__value" data-diag="ahorro">S/ 39</p>
+          <span class="pill">al mes con 5 acciones</span>
+        </div>
+      </div>
+
+      <div class="layout layout--diag">
+        <div class="card chart">
+          <div class="chart__head">
+            <h2>¿En qué se va tu agua?</h2>
+            <span class="muted">Litros al día</span>
+          </div>
+          <ul class="chart__rows" id="barras">
+            <!-- Se llena desde JavaScript con los datos del hogar -->
+          </ul>
+        </div>
+
+        <aside class="aside">
+          <div class="card insight">
+            <span class="icon-circle icon-circle--lg">
+              <svg viewBox="-14 -16 28 30" aria-hidden="true"><path d="M0,-14 C7,-5 10,1 10,5 A10,10 0 0 1 -10,5 C-10,1 -7,-5 0,-14 Z" fill="#5AA9D6"/></svg>
+            </span>
+            <p class="insight__text">La ducha es tu mayor consumo.</p>
+            <p class="insight__strong">Ahí está tu mayor oportunidad de ahorro.</p>
+            <p class="muted">Bajarla a 5 min ahorraría ~S/ 12 al mes.</p>
+          </div>
+
+          <a href="#plan" class="btn btn--primary btn--tall">Ver cómo ahorrar</a>
+
+          <div class="note note--compact">
+            <h2>Tu siguiente paso</h2>
+            <p>Elige tus acciones y arma tu plan.</p>
+          </div>
+        </aside>
+      </div>
+
+      <p class="disclaimer">Simulación académica. Las cifras son ejemplos calculados a partir de promedios y no corresponden a un medidor real ni a tu recibo.</p>
+    </section>
+
+
+    <!-- =====================================================
+         PANTALLA 5 · RECOMENDACIONES / PLAN
+         ===================================================== -->
+    <section class="screen" id="plan" data-app="plan" aria-labelledby="t-plan">
+      <div class="page-title page-title--tight">
+        <span class="eyebrow">Tus recomendaciones</span>
+        <h1 id="t-plan">Tus 5 acciones con más impacto</h1>
+      </div>
+
+      <div class="filters">
+        <div class="chips" role="radiogroup" aria-label="Filtrar acciones" id="filtros">
+          <button type="button" class="chip is-active" role="radio" aria-checked="true" data-filtro="todas">Todas</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" data-filtro="sin-costo">Sin costo</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" data-filtro="inversion">Inversión</button>
+        </div>
+        <span class="muted">Ordenadas por ahorro mensual</span>
+      </div>
+
+      <div class="layout">
+        <ul class="actions-list">
+          <li>
+            <label class="action" data-costo="sin-costo">
+              <input type="checkbox" value="12" data-nombre="Ducha de 5 minutos" checked>
+              <span class="checkbox"></span>
+              <span class="icon-circle icon-circle--md icon-circle--gray">
+                <svg viewBox="-12 -13 24 26" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M-10,-12 H0 V-10" fill="none"/><path d="M-8,-4 A8,7 0 0 1 8,-4 Z"/><circle cx="-5" cy="3" r="1"/><circle cx="0" cy="5" r="1"/><circle cx="5" cy="3" r="1"/><circle cx="-3" cy="10" r="1"/><circle cx="3" cy="10" r="1"/></svg>
+              </span>
+              <span class="action__info">
+                <span class="action__title">Reduce tu ducha a 5 minutos</span>
+                <span class="action__tags"><span class="badge badge--high">Alto impacto</span><span>Sin costo</span></span>
+              </span>
+              <span class="action__saving">S/ 12 al mes</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+            </label>
+          </li>
+          <li>
+            <label class="action" data-costo="inversion">
+              <input type="checkbox" value="9" data-nombre="Aireador en el caño" checked>
+              <span class="checkbox"></span>
+              <span class="icon-circle icon-circle--md icon-circle--gray">
+                <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M-10,-3 H3 A6,6 0 0 1 9,3 V6"/><path d="M-4,-3 V-9 M-8,-9 H0"/><circle cx="9" cy="10.5" r="1.3" fill="currentColor"/></svg>
+              </span>
+              <span class="action__info">
+                <span class="action__title">Instala un aireador en el caño</span>
+                <span class="action__tags"><span class="badge badge--high">Alto impacto</span><span>Inversión</span></span>
+              </span>
+              <span class="action__saving">S/ 9 al mes</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+            </label>
+          </li>
+          <li>
+            <label class="action" data-costo="sin-costo">
+              <input type="checkbox" value="7" data-nombre="Lavadora a carga completa" checked>
+              <span class="checkbox"></span>
+              <span class="icon-circle icon-circle--md icon-circle--gray">
+                <svg viewBox="-13 -12 26 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M-6,-10 L-12,-6 L-9,0 L-6,-2 V10 H6 V-2 L9,0 L12,-6 L6,-10 Q0,-6 -6,-10 Z"/></svg>
+              </span>
+              <span class="action__info">
+                <span class="action__title">Usa la lavadora a carga completa</span>
+                <span class="action__tags"><span class="badge">Impacto medio</span><span>Sin costo</span></span>
+              </span>
+              <span class="action__saving">S/ 7 al mes</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+            </label>
+          </li>
+          <li>
+            <label class="action" data-costo="sin-costo">
+              <input type="checkbox" value="6" data-nombre="Llave cerrada al lavar platos">
+              <span class="checkbox"></span>
+              <span class="icon-circle icon-circle--md icon-circle--gray">
+                <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M-6,-10 V-3 M-9,-10 V-5 Q-9,-1 -6,-1 Q-3,-1 -3,-5 V-10 M-6,-1 V10"/><path d="M6,10 V-10 Q10,-6 10,0 H6"/></svg>
+              </span>
+              <span class="action__info">
+                <span class="action__title">Cierra la llave al lavar los platos</span>
+                <span class="action__tags"><span class="badge">Impacto medio</span><span>Sin costo</span></span>
+              </span>
+              <span class="action__saving">S/ 6 al mes</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+            </label>
+          </li>
+          <li>
+            <label class="action" data-costo="sin-costo">
+              <input type="checkbox" value="5" data-nombre="Revisar fugas del inodoro">
+              <span class="checkbox"></span>
+              <span class="icon-circle icon-circle--md icon-circle--gray">
+                <svg viewBox="-12 -12 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M-8,-10 H-2 V-2 H10 Q10,6 2,7 L3,11 H-5 L-4,6 Q-8,4 -8,-2 Z"/></svg>
+              </span>
+              <span class="action__info">
+                <span class="action__title">Revisa fugas en el inodoro</span>
+                <span class="action__tags"><span class="badge">Impacto medio</span><span>Sin costo</span></span>
+              </span>
+              <span class="action__saving">S/ 5 al mes</span>
+              <svg class="chevron" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+            </label>
+          </li>
+        </ul>
+
+        <aside class="aside">
+          <div class="card card--aside">
+            <h2 class="aside__title aside__title--dark">Mi plan</h2>
+            <p class="muted" id="plan-cuenta">3 de 5 acciones seleccionadas</p>
+
+            <ul class="plan-list" id="plan-lista"></ul>
+
+            <hr class="divider divider--flat">
+
+            <p class="muted">Ahorro estimado</p>
+            <p class="plan-total"><span id="plan-total">S/ 28</span> <small>al mes</small></p>
+            <span class="pill" id="plan-anual">≈ S/ 336 al año</span>
+          </div>
+
+          <a href="#plan" class="btn btn--primary btn--tall" id="plan-boton">Ver mi plan (3)</a>
+
+          <div class="note">
+            <div class="note__head">
+              <svg class="tip__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="10" r="7" fill="#FFB703"/>
+                <rect x="8.5" y="17" width="7" height="4" rx="1.5" fill="#E8A300"/>
+              </svg>
+              <h2>Consejo</h2>
+            </div>
+            <p>Empieza por las acciones sin costo: ahorras desde hoy.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+  /* =========================================================
+     1. NAVEGACIÓN ENTRE PANTALLAS (una sola página)
+     Cada pantalla es una <section class="screen" id="...">.
+     Los enlaces usan #id y aquí se muestra la que corresponde.
+     ========================================================= */
+  const pantallas = document.querySelectorAll('.screen');
+
+  function mostrarPantalla() {
+    const id = location.hash.slice(1) || 'hogar';
+    const actual = document.getElementById(id);
+    if (!actual || !actual.classList.contains('screen')) return;
+
+    pantallas.forEach(p => p.classList.toggle('is-active', p === actual));
+
+    // Modo del header: "pasos" (cuestionario) o "app" (resultados)
+    const paso = Number(actual.dataset.paso || 0);
+    document.body.dataset.modo = paso ? 'pasos' : 'app';
+
+    if (paso) {
+      document.getElementById('paso-texto').textContent = `Paso ${paso} de 3`;
+      document.getElementById('paso-porcentaje').textContent = Math.round(paso / 3 * 100) + '%';
+      document.getElementById('paso-barra').style.width = (paso / 3 * 100) + '%';
+      document.querySelectorAll('.step').forEach(s => {
+        const n = Number(s.dataset.step);
+        s.classList.toggle('step--active', n === paso);
+        s.classList.toggle('step--done', n < paso);
+      });
+    }
+
+    document.querySelectorAll('[data-nav]').forEach(a =>
+      a.classList.toggle('is-active', a.dataset.nav === actual.dataset.app));
+    document.querySelector('.dropdown').open = false;
+
+    if (id === 'equipos') actualizarResumen();
+    if (id === 'diagnostico') pintarDiagnostico(hogarSegunPersonas());
+    setTimeout(() => window.scrollTo(0, 0));
+  }
+  window.addEventListener('hashchange', mostrarPantalla);
+
+
+  /* =========================================================
+     2. CONTROLES DEL CUESTIONARIO
+     ========================================================= */
+  const personas = document.getElementById('personas');
+  document.getElementById('mas').addEventListener('click', () => {
+    personas.textContent = Math.min(+personas.textContent + 1, 20);
+  });
+  document.getElementById('menos').addEventListener('click', () => {
+    personas.textContent = Math.max(+personas.textContent - 1, 1);
+  });
+
+  // Cualquier grupo de opciones: solo una queda activa
+  document.querySelectorAll('[data-campo]').forEach(grupo => {
+    grupo.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      grupo.querySelectorAll('button').forEach(b => {
+        b.classList.toggle('is-active', b === btn);
+        b.setAttribute('aria-checked', b === btn);
+      });
+    });
+  });
+
+  const elegido = campo =>
+    document.querySelector(`[data-campo="${campo}"] .is-active`).textContent.trim();
+
+  function actualizarResumen() {
+    const monto = parseFloat(document.getElementById('monto').value) || 0;
+    const datos = {
+      personas: personas.textContent,
+      monto: 'S/ ' + monto.toFixed(2),
+      consumo: (document.getElementById('consumo').value || 0) + ' m³',
+      vivienda: elegido('vivienda'),
+      ducha: elegido('ducha'),
+      llave: elegido('llave')
+    };
+    for (const clave in datos) {
+      document.querySelector(`[data-resumen="${clave}"]`).textContent = datos[clave];
+    }
+  }
+
+
+  /* =========================================================
+     3. DIAGNÓSTICO (datos de ejemplo según tamaño del hogar)
+     ========================================================= */
+  const diagnosticos = {
+    '1a2':  { total: 240, persona: 120, costo: 34, ahorro: 19,
+              barras: [['Ducha', 40, 96], ['Inodoro', 26, 62], ['Lavado de ropa', 17, 41], ['Cocina y platos', 12, 29], ['Otros', 5, 12]] },
+    '3a4':  { total: 480, persona: 160, costo: 68, ahorro: 39,
+              barras: [['Ducha', 38, 182], ['Inodoro', 27, 130], ['Lavado de ropa', 18, 86], ['Cocina y platos', 12, 58], ['Otros', 5, 24]] },
+    '5mas': { total: 700, persona: 140, costo: 99, ahorro: 56,
+              barras: [['Ducha', 36, 252], ['Inodoro', 28, 196], ['Lavado de ropa', 19, 133], ['Cocina y platos', 12, 84], ['Otros', 5, 35]] }
+  };
+
+  function hogarSegunPersonas() {
+    const n = +personas.textContent;
+    return n <= 2 ? '1a2' : n <= 4 ? '3a4' : '5mas';
+  }
+
+  function pintarDiagnostico(clave) {
+    const d = diagnosticos[clave];
+    const set = (k, v) => document.querySelector(`[data-diag="${k}"]`).textContent = v;
+    set('total', d.total + ' L');
+    set('costo', `S/ ${d.costo} al mes`);
+    set('persona', d.persona + ' L');
+    set('ahorro', 'S/ ' + d.ahorro);
+
+    document.getElementById('diag-subtitulo').textContent =
+      `Basado en los datos de tu hogar · ${personas.textContent} personas · ${elegido('vivienda')}`;
+
+    // La barra más grande ocupa todo el ancho; las demás, en proporción
+    const max = d.barras[0][1];
+    document.getElementById('barras').innerHTML = d.barras.map(([nombre, pct, litros], i) => `
+      <li class="chart__row">
+        <span class="chart__name">${nombre}</span>
+        <span class="bar"><span class="bar__fill bar__fill--${i === 0 ? 'top' : i === 4 ? 'other' : 'mid'}" style="width:${pct / max * 100}%">${pct}%</span></span>
+        <span class="chart__liters">${litros} L</span>
+      </li>`).join('');
+
+    document.querySelectorAll('#hogar-chips .chip').forEach(c => {
+      const activo = c.dataset.hogar === clave;
+      c.classList.toggle('is-active', activo);
+      c.setAttribute('aria-checked', activo);
+    });
+  }
+
+  document.getElementById('hogar-chips').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (chip) pintarDiagnostico(chip.dataset.hogar);
+  });
+
+
+  /* =========================================================
+     4. PLAN: filtros y total según las acciones marcadas
+     ========================================================= */
+  const acciones = document.querySelectorAll('.action input');
+
+  function actualizarPlan() {
+    const marcadas = [...acciones].filter(a => a.checked);
+    const total = marcadas.reduce((s, a) => s + +a.value, 0);
+
+    document.getElementById('plan-cuenta').textContent =
+      `${marcadas.length} de ${acciones.length} acciones seleccionadas`;
+    document.getElementById('plan-lista').innerHTML = marcadas.map(a => `
+      <li class="plan-list__item">
+        <span class="plan-list__dot"></span>${a.dataset.nombre}<strong>S/ ${a.value}</strong>
+      </li>`).join('');
+    document.getElementById('plan-total').textContent = 'S/ ' + total;
+    document.getElementById('plan-anual').textContent = `≈ S/ ${total * 12} al año`;
+    document.getElementById('plan-boton').textContent = `Ver mi plan (${marcadas.length})`;
+  }
+  acciones.forEach(a => a.addEventListener('change', actualizarPlan));
+
+  document.getElementById('filtros').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    document.querySelectorAll('#filtros .chip').forEach(c => {
+      c.classList.toggle('is-active', c === chip);
+      c.setAttribute('aria-checked', c === chip);
+    });
+    document.querySelectorAll('.action').forEach(card => {
+      const ver = chip.dataset.filtro === 'todas' || card.dataset.costo === chip.dataset.filtro;
+      card.parentElement.hidden = !ver;
+    });
+  });
+
+
+  /* Inicio */
+  actualizarPlan();
+  mostrarPantalla();
+  </script>
+</body>
+</html>
